@@ -15,68 +15,37 @@
     <script src="/app/clients/ajoutC.js"></script>
     <link rel="stylesheet" href="app\clients\css\bootstrap.min.css">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+<div class="page-container fade-in">
+  <div style="margin-bottom:24px;">
+    <a href="#!/clients" class="btn btn-secondary">← Retour</a>
+  </div>
 
-        h1 {
-            text-align: center;
-            color: rgb(177, 148, 148);
-            margin-bottom: 70px;
-        }
+  <div class="form-card">
+    <div class="page-title" style="font-size:1.6em; margin-bottom:4px;">Ajouter Client</div>
+    <div class="page-subtitle">Enregistrez un nouveau client</div>
 
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
+    <div class="form-section-title">Informations personnelles</div>
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
+    <div class="form-group">
+      <label>Nom</label>
+      <input type="text" ng-model="client.nom" placeholder="Ex: El Khamlichi">
+    </div>
+    <div class="form-group">
+      <label>Prénom</label>
+      <input type="text" ng-model="client.prenom" placeholder="Ex: Khalid">
+    </div>
+    <div class="form-group">
+      <label>Numéro / Identifiant</label>
+      <input type="text" ng-model="client.Numero" placeholder="Ex: CIN, Passeport...">
+    </div>
+    <div class="form-group">
+      <label>Adresse</label>
+      <input type="text" ng-model="client.adresse" placeholder="Ex: Rabat, Maroc">
+    </div>
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        input:hover{
-            background-color: aliceblue;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: rgb(177, 148, 148);
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-
-        button:hover {
-            background-color: #6c4b67;
-        }
-    </style>
-</head>
-
-    
-
-<body ng-controller="addClientCtrl">
-    <h1>Ajouter Client</h1>
-    <form>
-        <label>Nom:</label>
-        <input type="text" ng-model="client.nom"><br>
-        <label>Prenom:</label>
-        <input type="text" ng-model="client.prenom"><br>
-        <label>Numero:</label>
-        <input type="text" ng-model="client.Numero"><br>
-        <label>Adresse:</label>
-        <input type="text" ng-model="client.adresse"><br>
-        <button type="button" ng-click="addClient()">Ajouter Client</button>
-    </form>
-  </body>
-
-</html>
+    <div style="display:flex; gap:12px; margin-top:28px;">
+      <button class="btn btn-primary" type="button" ng-click="addClient()">✅ Ajouter</button>
+      <a href="#!/clients" class="btn btn-secondary">Annuler</a>
+    </div>
+  </div>
+</div>

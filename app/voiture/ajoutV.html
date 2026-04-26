@@ -14,73 +14,41 @@
     
     <script src="/app/voiture/ajoutV.js"></script>
 
-    <style>
-        h1 {
-            color: rgb(177, 148, 148);
-        }
-        body {
-            font-family: Arial, sans-serif;
-        }
+ <div class="page-container fade-in">
+  <div style="margin-bottom:24px;">
+    <a href="#!/cars" class="btn btn-secondary">← Retour</a>
+  </div>
 
-        h1 {
-            text-align: center;
-            margin-bottom: 70px;
-        }
+  <div class="form-card">
+    <div class="page-title" style="font-size:1.6em; margin-bottom:4px;">Ajouter Voiture</div>
+    <div class="page-subtitle">Enregistrez un nouveau véhicule</div>
 
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
+    <div class="form-section-title">Informations du véhicule</div>
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
+    <div class="form-group">
+      <label>Numéro</label>
+      <input type="text" ng-model="car.numero" placeholder="Ex: 12">
+    </div>
+    <div class="form-group">
+      <label>Type</label>
+      <input type="text" ng-model="car.type" placeholder="Ex: SUV, Berline, Citadine...">
+    </div>
+    <div class="form-group">
+      <label>Marque</label>
+      <input type="text" ng-model="car.marque" placeholder="Ex: Toyota, Mercedes...">
+    </div>
+    <div class="form-group">
+      <label>Modèle</label>
+      <input type="text" ng-model="car.modele" placeholder="Ex: Corolla, AMG...">
+    </div>
+    <div class="form-group">
+      <label>Puissance (CV)</label>
+      <input type="text" ng-model="car.puissance" placeholder="Ex: 90">
+    </div>
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-
-        input:hover {
-            background-color: aliceblue;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: rgb(177, 148, 148);
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-
-        button:hover {
-            background-color: #6c4b67;
-        }
-    </style>
-
-</head>
-
-<body ng-controller="addCarCtrl">
-    <h1>Ajouter Voiture</h1>
-    <form>
-        <label>Numero:</label>
-        <input type="text" ng-model="car.numero"><br>
-        <label>Type:</label>
-        <input type="text" ng-model="car.type"><br>
-        <label>Marque:</label>
-        <input type="text" ng-model="car.marque"><br>
-        <label>Modele:</label>
-        <input type="text" ng-model="car.modele"><br>
-        <label>Puissance:</label>
-        <input type="text" ng-model="car.puissance"><br>
-        
-      <button type="button" ng-click="addCar()">Ajouter</button>
-    </form>
-</body>
-
-</html>
+    <div style="display:flex; gap:12px; margin-top:28px;">
+      <button class="btn btn-primary" type="button" ng-click="addCar()">✅ Ajouter</button>
+      <a href="#!/cars" class="btn btn-secondary">Annuler</a>
+    </div>
+  </div>
+</div>

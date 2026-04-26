@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Rental — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      background: #0f0f1a;
+      overflow: hidden;
+    }
+
+    /* Left panel */
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+    }
+
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(15,52,96,0.5) 0%, transparent 70%);
+      bottom: -50px;
+      left: -50px;
+    }
+
+    .brand {
+      text-align: center;
+      z-index: 1;
+    }
+
+    .brand-icon {
+      font-size: 5em;
+      margin-bottom: 24px;
+      display: block;
+      filter: drop-shadow(0 0 30px rgba(233,69,96,0.4));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .brand-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8em;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: #e94560;
+    }
+
+    .brand-sub {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.95em;
+      margin-top: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .features {
+      margin-top: 60px;
+      z-index: 1;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.88em;
+    }
+
+    .feature-item:last-child { border-bottom: none; }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(233,69,96,0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1em;
+      flex-shrink: 0;
+    }
+
+    /* Right panel */
+    .right-panel {
+      width: 480px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 50px;
+      position: relative;
+    }
+
+    .login-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2em;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .login-sub {
+      color: #8892a4;
+      font-size: 0.9em;
+      margin-bottom: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78em;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #8892a4;
+      margin-bottom: 8px;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap .icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1em;
+      color: #c0c8d8;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      border: 2px solid #e8ecf4;
+      border-radius: 12px;
+      font-size: 0.95em;
+      font-family: 'DM Sans', sans-serif;
+      color: #1a1a2e;
+      background: #f8f9ff;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: #e94560;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(233,69,96,0.08);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: #e94560;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1em;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      transition: all 0.2s;
+      box-shadow: 0 6px 20px rgba(233,69,96,0.35);
+    }
+
+    .btn-login:hover {
+      background: #c73652;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(233,69,96,0.45);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .error-msg {
+      background: #ffeef1;
+      color: #c0392b;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.85em;
+      margin-top: 16px;
+      display: none;
+      border-left: 3px solid #e94560;
+    }
+
+    .error-msg.show { display: block; }
+
+    .loading-dots {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .loading-dots span {
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      animation: bounce 0.8s infinite;
+    }
+
+    .loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .footer-text {
+      margin-top: 40px;
+      text-align: center;
+      color: #c0c8d8;
+      font-size: 0.78em;
+    }
+
+    @media (max-width: 768px) {
+      .left-panel { display: none; }
+      .right-panel { width: 100%; padding: 40px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Panel -->
+  <div class="left-panel">
+    <div class="brand">
+      <span class="brand-icon">🚗</span>
+      <div class="brand-title">Car<span>Rental</span></div>
+      <div class="brand-sub">Système de gestion de flotte</div>
+    </div>
+
+    <div class="features">
+      <div class="feature-item">
+        <div class="feature-icon">🚘</div>
+        <span>Gestion complète des véhicules</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">👤</div>
+        <span>Suivi des clients en temps réel</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📄</div>
+        <span>Contrats PDF automatiques</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🏠</div>
+        <span>Dashboard garage intelligent</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <div class="login-title">Bon retour 👋</div>
+    <div class="login-sub">Connectez-vous pour accéder au tableau de bord</div>
+
+    <div class="form-group">
+      <label>Adresse Email</label>
+      <div class="input-wrap">
+        <span class="icon">✉️</span>
+        <input type="email" id="email" placeholder="votre@email.com" autocomplete="email">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <div class="input-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+    </div>
+
+    <button class="btn-login" id="loginBtn" onclick="handleLogin()">
+      Se connecter
+    </button>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="footer-text">
+      Car Rental © 2026 — Tous droits réservés
+    </div>
+  </div>
+
+  <script>
+    // Check si déjà connecté
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        window.location.href = 'index.html';
+      }
+    });
+
+    function handleLogin() {
+      var email = document.getElementById('email').value.trim();
+      var password = document.getElementById('password').value;
+      var btn = document.getElementById('loginBtn');
+      var errorMsg = document.getElementById('errorMsg');
+
+      if (!email || !password) {
+        showError('Veuillez remplir tous les champs.');
+        return;
+      }
+
+      // Loading state
+      btn.disabled = true;
+      btn.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+      errorMsg.classList.remove('show');
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function(userCredential) {
+          window.location.href = 'index.html';
+        })
+        .catch(function(error) {
+          btn.disabled = false;
+          btn.innerHTML = 'Se connecter';
+          var msg = 'Email ou mot de passe incorrect.';
+          if (error.code === 'auth/user-not-found') msg = 'Aucun compte trouvé avec cet email.';
+          if (error.code === 'auth/wrong-password') msg = 'Mot de passe incorrect.';
+          if (error.code === 'auth/invalid-email') msg = 'Adresse email invalide.';
+          if (error.code === 'auth/too-many-requests') msg = 'Trop de tentatives. Réessayez plus tard.';
+          showError(msg);
+        });
+    }
+
+    function showError(msg) {
+      var errorMsg = document.getElementById('errorMsg');
+      errorMsg.textContent = '⚠️ ' + msg;
+      errorMsg.classList.add('show');
+    }
+
+    // Login avec Enter
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+</html>

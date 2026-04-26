@@ -17,129 +17,59 @@
     <script src="/app/voiture/mvoiture.js"></script>
     <script src="/app/location/location.js"></script>
 
-    <style>
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-  text-align: center;
-}
+<div class="page-container fade-in">
 
-/* Styling for the heading */
-h1 {
-  margin-top: 300px;
-}
-
-/* Styling for the search input */
-input[type="text"] {
-  margin-bottom: 10px;
-  padding: 5px;
-  width: 200px;
-  margin-bottom: 50px;
-}
-label{
-    margin-top: 50px;
-}
-
-/* Styling for the client list */
-ul.v {
-  list-style-type: none;
-  padding: 0;
-}
-
-/* Styling for each client element */
-li.velem {
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  padding: 10px;
-}
-
-/* Styling for client fields */
-span.out {
-  display: inline-block;
-  width: 100px;
-}
-.left{
-    margin-left: -200px;
-}
-
-/* Styling for the "Modifier" link */
-
-a[href^="#!/editCar/"],[href^="#!/location/"] {
-  margin-right: 10px;
-  text-decoration: none;
-  color: rgb(101, 70, 222);
-}
-
-/* Styling for the "Supprimer" button */
-button {
-  padding: 5px 10px;
-  background-color: rgb(177, 148, 148);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-button:hover{
-    background-color: #6c4b67;
-}
-.add {
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-
-
-}
-
-.add a {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #f9f9f9;
-  color: #333;
-  text-decoration: none;
-  font-size: 18px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.add a:hover {
-  background-color: #eaeaea;
-}
-    </style>
-</head>
-
-<body ng-app="monApplication">
-    <div class="add"><a href="#!/addCar">Ajouter Voiture</a></div>
-    <div class="container">
-    <h1>Liste des Voitures</h1>
-    <label >Rechercher:</label> 
-    <input type="text" ng-model="searchText" placeholder="">
-    <div class="left">
-        <span class="out">NUMERO</span>
-        <span class="out">TYPE</span>
-        <span class="out">MARQUE</span>
-        <span class="out">MODELE</span>
-        <span class="out">PUISSANCE</span>
-        
+  <div class="top-bar">
+    <div>
+      <div class="page-title">🚗 Voitures</div>
+      <div class="page-subtitle">Gérez votre flotte de véhicules</div>
     </div>
-    <ul class="v">
-        <li class="velem" ng-repeat="car in cars | filter: searchText">
-            <span class="out">{{car.numero}}</span>
-            <span class="out">{{car.type}}</span>
-            <span class="out">{{car.marque}}</span>
-            <span class="out">{{car.modele}}</span>
-            <span class="out">{{car.puissance}}</span>
-              
-            <a href="#!/editCar/{{car.id}}">Modifier </a>
-            <a href="#!/location/{{car.id}}">louer </a>
-            <button ng-click="deleteCar(car)">Supprimer</button>
-            
-        </li>
-    </ul>
-</div>
+    <a href="#!/addCar" class="btn btn-primary">+ Ajouter Voiture</a>
+  </div>
 
-</body>
-</html>
+  <div class="search-wrap">
+    <input type="text" ng-model="searchText" placeholder="Rechercher une voiture...">
+  </div>
+
+  <div class="data-table">
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Type</th>
+          <th>Marque</th>
+          <th>Modèle</th>
+          <th>Puissance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="fade-in" ng-repeat="car in cars | filter: searchText">
+          <td><strong>{{ car.numero }}</strong></td>
+          <td>
+            <span class="badge badge-info">{{ car.type }}</span>
+          </td>
+          <td>{{ car.marque }}</td>
+          <td>{{ car.modele }}</td>
+          <td>{{ car.puissance }} CV</td>
+          <td>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <a href="#!/editCar/{{car.id}}" class="btn btn-edit">✏️ Modifier</a>
+              <a href="#!/location/{{car.id}}" class="btn btn-rent">🔑 Louer</a>
+              <button class="btn btn-delete" ng-click="deleteCar(car)">🗑️ Supprimer</button>
+            </div>
+          </td>
+        </tr>
+        <tr ng-if="!cars || cars.length === 0">
+          <td colspan="6">
+            <div class="empty-state">
+              <div class="empty-icon">🚘</div>
+              <div>Aucune voiture enregistrée</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

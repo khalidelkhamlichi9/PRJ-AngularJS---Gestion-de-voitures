@@ -1,0 +1,99 @@
+<div class="page-container fade-in">
+
+  <div class="top-bar">
+    <div>
+      <div class="page-title">📊 Dashboard</div>
+      <div class="page-subtitle">Vue d'ensemble de votre flotte</div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div ng-if="notifications.length > 0" style="margin-bottom:24px;">
+    <div ng-repeat="n in notifications"
+      style="padding:12px 18px; border-radius:10px; margin-bottom:8px; font-size:0.9em; font-weight:500;"
+      ng-class="{'background:#fff3cd; color:#856404; border-left:4px solid #ffc107': n.type=='warning',
+                 'background:#ffeef1; color:#c0392b; border-left:4px solid #e94560': n.type=='danger'}"
+      ng-style="n.type=='warning' ? {'background':'#fff3cd','color':'#856404','border-left':'4px solid #ffc107'} : {'background':'#ffeef1','color':'#c0392b','border-left':'4px solid #e94560'}">
+      {{ n.msg }}
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid" ng-if="!loading">
+    <div class="stat-card blue">
+      <div class="stat-num">{{ stats.voitures }}</div>
+      <div class="stat-label">🚗 Total Voitures</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">{{ stats.disponibles }}</div>
+      <div class="stat-label">✅ Disponibles</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num">{{ stats.locations }}</div>
+      <div class="stat-label">🔑 En Location</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-num">{{ stats.clients }}</div>
+      <div class="stat-label">👤 Clients</div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-wrap" ng-if="loading">
+    <div class="spinner"></div>
+    Chargement...
+  </div>
+
+  <!-- Recent Locations -->
+  <div ng-if="!loading">
+    <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.1em; margin-bottom:16px; color:#1a1a2e;">
+      📋 Locations récentes
+    </div>
+
+    <div class="data-table" ng-if="recentLocations.length > 0">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Voiture</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="l in recentLocations">
+            <td><strong>{{ l.client }}</strong></td>
+            <td>N° {{ l.voiture }}</td>
+            <td>{{ l.debut }}</td>
+            <td>{{ l.fin }}</td>
+            <td>
+              <span class="badge" ng-class="l.status === 'active' ? 'badge-success' : 'badge-info'">
+                {{ l.status === 'active' ? '🟢 Active' : '✅ Terminée' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty-state" ng-if="recentLocations.length === 0">
+      <div class="empty-icon">📋</div>
+      <div>Aucune location enregistrée</div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div style="margin-top:32px;">
+      <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.1em; margin-bottom:16px; color:#1a1a2e;">
+        ⚡ Actions rapides
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="#!/addCar" class="btn btn-primary">+ Ajouter Voiture</a>
+        <a href="#!/addClient" class="btn btn-rent">+ Ajouter Client</a>
+        <a href="#!/cars" class="btn btn-edit">🔑 Louer Voiture</a>
+        <a href="#!/garage" class="btn btn-secondary">🏠 Voir Garage</a>
+      </div>
+    </div>
+  </div>
+
+</div>

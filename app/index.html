@@ -3,25 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>car rental</title>
-  <meta name="description" content="">
+  <title>Car Rental</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="lib/html5-boilerplate/dist/css/normalize.css">
-  <link rel="stylesheet" href="lib/html5-boilerplate/dist/css/main.css">
-  <link rel="shortcut icon" href="/app/cars/rent.png">
   <link rel="stylesheet" href="app.css">
 
-  <!-- Firebase v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
   <script src="firebase-config.js"></script>
 
-  <!-- AngularJS -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
 
-  <!-- App scripts -->
   <script src="app.js"></script>
+  <script src="dashboard/dashboard.js"></script>
   <script src="voiture/ajoutV.js"></script>
   <script src="voiture/voiture.js"></script>
   <script src="voiture/mvoiture.js"></script>
@@ -31,20 +27,36 @@
   <script src="garage/garage.js"></script>
   <script src="location/location.js"></script>
   <script src="location/success.js"></script>
-
 </head>
 <body>
   <nav class="nav">
-    <ul>
-      <li><a ng-href="#!/cars">Voitures</a></li>
-      <li><a ng-href="#!/clients">Clients</a></li>
-      <li><a ng-href="#!/success">Contrat</a></li>
-      <li><a ng-href="#!/location">Location</a></li>
-      <li><a ng-href="#!/garage">Garage</a></li>
+    <ul style="flex-shrink:0;">
+      <li><a ng-href="#!/dashboard">📊 Dashboard</a></li>
+      <li><a ng-href="#!/cars">🚗 Voitures</a></li>
+      <li><a ng-href="#!/clients">👤 Clients</a></li>
+      <li><a ng-href="#!/location">🔑 Location</a></li>
+      <li><a ng-href="#!/garage">🏠 Garage</a></li>
     </ul>
+    <div class="nav-user  style="flex-shrink:0;">
+      <div class="search-global-wrap">
+        <span class="search-global-icon">🔍</span>
+        <input class="search-global-input" type="text"
+          ng-model="searchQuery"
+          ng-change="globalSearch()"
+          placeholder="Recherche...">
+        <div class="search-results-dropdown" ng-if="showSearch">
+          <div ng-if="searchResults.length === 0" class="search-no-result">Aucun résultat</div>
+          <div class="search-result-item" ng-repeat="r in searchResults" ng-click="goToResult(r.link)">
+            <div class="search-result-type">{{ r.type }}</div>
+            <div class="search-result-label">{{ r.label }}</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-logout" ng-click="toggleDark()">{{ darkMode ? '☀️' : '🌙' }}</button>
+      <span class="user-email" ng-if="currentUser">{{ currentUser }}</span>
+      <button class="btn-logout" ng-click="logout()">🚪</button>
+    </div>
   </nav>
-
   <div ng-view></div>
-
 </body>
 </html>
